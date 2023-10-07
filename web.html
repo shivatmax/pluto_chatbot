@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PaLM AI Chatbot</title>
+    <style>
+        /* Add your CSS here */
+        #chatbox {
+            position: fixed;
+            bottom: 50px;
+            right: 0;
+            width: 300px;
+            height: 400px;
+            overflow: auto;
+            border: 1px solid black;
+        }
+        #inputForm {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+        }
+        #startButton {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Google_mic.svg/716px-Google_mic.svg.png');
+            background-size: cover;
+            width: 32px;
+            height: 32px;
+        }
+        #startButton.listening {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Google_mic_on.svg/716px-Google_mic_on.svg.png');
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <!-- Chat messages will be added here -->
+    </div>
+    <form id="inputForm">
+        <input type="text" id="inputField" placeholder="Type your message...">
+        <button type="submit">Send</button>
+        <button id="startButton"></button>
+    </form>
+
+    <script>
+        const url = 'https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=AIzaSyAmMtufl_TPyWdLbuCFD5Lh8IEpJWrEXYo';
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        let chatStr = 'Sir: hi \nPluto: Hello, I am Pluto,the nasa chatbot \nSir: You are nasa chatbot which strictly only knows about Nasa,Space and satellites.Other than you will always say "I am pluto and i only know about Space.You will answer strictly in less than 50 words not more than that." \nPluto: Ok i am pluto, nasa robot and i only know about Space.I will answer you in less than 50 words not more than that.';
+
+        const synth = window.speechSynthesis;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', () => {
+            recognition.start();
+            startButton.classList.add('listening');
+        });
+
+        recognition.addEventListener('result', (event) => {
+            const speechResult = event.results[0][0].transcript;
+            document.getElementById('inputField').value = speechResult;
+            document.getElementById('inputForm').dispatchEvent(new Event('submit'));
+            startButton.classList.remove('listening');
+        });
+
+        document.getElementById('inputForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const inputField = document.getElementById('inputField');
+            const prompt = inputField.value;
+            inputField.value = '';
+
+            chatStr += `Sir: ${prompt}\nPluto: `;
+
+            const data = {
+                "prompt": {
+                    "text": chatStr
+                }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const responseJson = await response.json();
+                const output = responseJson['candidates'][0]['output'];
+
+                chatStr += `${output}\n`;
+
+                // Display only the latest user and assistant messages in the chatbox
+                document.getElementById('chatbox').innerHTML = `<p>User: ${prompt}</p><p>Assistant: ${output}</p>`;
+
+                // Speak the assistant's message
+                const utterance = new SpeechSynthesisUtterance(output);
+                synth.speak(utterance);
+            } catch (error) {
+                console.log(`An error occurred: ${error}`);
+            }
+        });
+    </script>
+</body>
+</html>
