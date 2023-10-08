@@ -1,1 +1,6 @@
-# pluto_chatbot
+# pluto_chatbot![Screenshot 2023-10-08 064223](https://github.com/shivatmax/pluto_chatbot/assets/115219800/031ee131-a24a-4592-8a10-ab2d798ba005)
+![Screenshot 2023-10-08 064511](https://github.com/shivatmax/pluto_chatbot/assets/115219800/84e22e2e-ccf7-45d8-9db8-c7114e8b055e)
+![Screenshot 2023-10-08 064520](https://github.com/shivatmax/pluto_chatbot/assets/115219800/c4de5ea0-9f70-46aa-9ff5-910155e173aa)
+![Screenshot 2023-10-08 064539](https://github.com/shivatmax/pluto_chatbot/assets/115219800/1b1bcbf3-64eb-4a4a-9e70-dddd97b37293)
+![Screenshot 2023-10-08 064621](https://github.com/shivatmax/pluto_chatbot/assets/115219800/3d4be1fc-030c-40a1-b029-2383834fece4)
+![Screenshot 2023-10-08 064651](https://github.com/shivatmax/pluto_chatbot/assets/115219800/7f99c0fb-a44c-4dc3-b436-af6cb2bdfb39)
